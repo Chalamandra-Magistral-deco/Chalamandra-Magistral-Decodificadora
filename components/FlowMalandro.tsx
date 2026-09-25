@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Trash, 
   MapPin, 
-  RotateCcw, 
+
   Wrench, 
   Download, 
   Grid
@@ -105,12 +105,6 @@ const FlowMalandro: React.FC = () => {
   const [brokenTribute, setBrokenTribute] = useState<string>('');
   const [ritualCompleted, setRitualCompleted] = useState<boolean>(false);
 
-  // 7. El Mapa de la Trampa State
-  const [pawnPosition, setPawnPosition] = useState<number>(1);
-  const [diceRolling, setDiceRolling] = useState<boolean>(false);
-  const [lastDiceRoll, setLastDiceRoll] = useState<number | null>(null);
-  const [gameMessage, setGameMessage] = useState<string>('¡Saca los dados para iniciar tu aventura!');
-
   // Final Reflexions State
   const [reflections, setReflections] = useState<finalAnswers>({
     q1: '',
@@ -141,7 +135,6 @@ const FlowMalandro: React.FC = () => {
         if (parsed.ritualCompleted) setRitualCompleted(parsed.ritualCompleted);
         if (parsed.toolBroken) setToolBroken(parsed.toolBroken);
         if (parsed.altarCandles) setAltarCandles(parsed.altarCandles);
-        if (parsed.pawnPosition) setPawnPosition(parsed.pawnPosition);
         if (parsed.reflections) setReflections(parsed.reflections);
       } catch (err) {
         console.error('Error restoring cache', err);
@@ -306,69 +299,6 @@ const FlowMalandro: React.FC = () => {
       brokenTribute: '',
       ritualCompleted: false
     });
-  };
-
-  // Game Board (Snakes & Ladders)
-  const boardCells = [
-    { num: 1, type: 'start', label: 'Inicio del Barrio' },
-    { num: 2, type: 'neutral', label: 'Estrategia' },
-    { num: 3, type: 'trap', label: 'Trampa: Procrastinación (Miedo)' },
-    { num: 4, type: 'power', label: 'Poder: Aliado del Café (+2 Flow)' },
-    { num: 5, type: 'neutral', label: 'Alineación' },
-    { num: 6, type: 'trap', label: 'Trampa: El Cliente Fantasma' },
-    { num: 7, type: 'neutral', label: 'Intuición' },
-    { num: 8, type: 'power', label: 'Poder: Hackeo Inteligente (+3 pasos)' },
-    { num: 9, type: 'trap', label: 'Trampa: Síndrome del Impostor' },
-    { num: 10, type: 'neutral', label: 'Límites Claros' },
-    { num: 11, type: 'power', label: 'Poder: Decisión Rápida' },
-    { num: 12, type: 'trap', label: 'Trampa: El Paro Técnico' },
-    { num: 13, type: 'neutral', label: 'Enfoque Puro' },
-    { num: 14, type: 'power', label: 'Poder: Dominio del Negocio' },
-    { num: 15, type: 'destination', label: 'El Desbloqueo del Flow Malandro' }
-  ];
-
-  const rollDiceAction = () => {
-    if (diceRolling) return;
-    setDiceRolling(true);
-    setLastDiceRoll(null);
-
-    let rolls = 0;
-    const interval = setInterval(() => {
-      setLastDiceRoll(Math.floor(Math.random() * 4) + 1); // 1 to 4 steps
-      rolls++;
-      if (rolls > 8) {
-        clearInterval(interval);
-        const rolled = Math.floor(Math.random() * 4) + 1;
-        setLastDiceRoll(rolled);
-        setDiceRolling(false);
-
-        let nextPos = pawnPosition + rolled;
-        if (nextPos >= 15) {
-          nextPos = 15;
-          setGameMessage(`🎲 ¡Sacaste un ${rolled}! Llegaste a la cima. ¡Nivel Malandro Desbloqueado! 🏆🔥`);
-        } else {
-          const landedCell = boardCells.find(c => c.num === nextPos);
-          if (landedCell?.type === 'trap') {
-            nextPos = Math.max(1, nextPos - 2);
-            setGameMessage(`🎲 ¡Sacaste ${rolled} y caíste en "${landedCell.label}"! Retrocedes 2 casillas.`);
-          } else if (landedCell?.type === 'power') {
-            nextPos = Math.min(15, nextPos + 2);
-            setGameMessage(`🎲 ¡Increíble! Sacaste ${rolled} y caíste en "${landedCell.label}". ¡Avanzas 2 casillas extra! 🚀`);
-          } else {
-            setGameMessage(`🎲 Sacaste un ${rolled} y te mueves a "${landedCell?.label || 'A salvo'}".`);
-          }
-        }
-        setPawnPosition(nextPos);
-        saveState({ pawnPosition: nextPos });
-      }
-    }, 100);
-  };
-
-  const resetGame = () => {
-    setPawnPosition(1);
-    setLastDiceRoll(null);
-    setGameMessage('Tablero reiniciado. ¡Prepárate para tirar los dados!');
-    saveState({ pawnPosition: 1 });
   };
 
   // Final Reflections Form
@@ -1229,103 +1159,6 @@ const FlowMalandro: React.FC = () => {
             </div>
           )}
 
-          {/* STEP 7: EL MAPA DE LA TRAMPA (Snakes & Ladders style) */}
-          {false && activeStep === 7 && (
-            <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
-              <div>
-                <span className="text-xs font-mono font-bold bg-[#08D9D6]/20 text-[#08D9D6] border border-[#08D9D6]/20 px-3 py-1 rounded-full uppercase">
-                  Paso 7: El Mapa de la Trampa
-                </span>
-                <h3 className="text-2xl font-bold text-white mt-3 flex items-center gap-2">
-                  <span>🎲🕵️‍♀️</span> Tablero de Juego "Snakes & Ladders" Urbano
-                </h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  Muchas trampas del laberinto son miedos y bloqueos internos. Tira los dados virtuales para mover tu ficha de "Flow" por el barrio. Evita las **Trampas rojas** y pásate a los **Poderes verdes** para desbloquear niveles.
-                </p>
-              </div>
-
-              {/* Rolling Module bar */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-950 p-4 rounded-xl border border-gray-800">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={rollDiceAction}
-                    disabled={diceRolling}
-                    className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-cyan-600 font-extrabold text-gray-950 hover:from-cyan-300 hover:to-cyan-500 active:scale-95 text-xs uppercase tracking-widest rounded-xl shadow-lg transition-transform flex items-center gap-2 disabled:opacity-50"
-                  >
-                    🎲 {diceRolling ? 'Tirando...' : 'Tirar Dados'}
-                  </button>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-gray-400 uppercase">Resultado:</span>
-                    {lastDiceRoll !== null ? (
-                      <span className="w-8 h-8 rounded bg-gray-900 border border-gray-700 flex items-center justify-center font-black text-cyan-400 text-sm animate-bounce">
-                        {lastDiceRoll}
-                      </span>
-                    ) : (
-                      <span className="text-gray-600 text-xs">-</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="text-center sm:text-right font-medium text-xs text-[#08D9D6] max-w-sm italic">
-                  {gameMessage}
-                </div>
-
-                <button 
-                  onClick={resetGame}
-                  className="p-1 hover:bg-gray-800 rounded group"
-                  title="Reiniciar Juego"
-                >
-                  <RotateCcw className="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
-                </button>
-              </div>
-
-              {/* Game board display */}
-              <div className="grid grid-cols-5 gap-2.5">
-                {boardCells.map((cell) => {
-                  const isOccupied = pawnPosition === cell.num;
-                  let colorClass = 'bg-gray-950 border-gray-850 text-gray-400';
-                  
-                  if (cell.type === 'start') colorClass = 'bg-stone-900 border-yellow-500/30 text-yellow-400';
-                  if (cell.type === 'trap') colorClass = 'bg-red-950/20 border-red-900/40 text-red-400';
-                  if (cell.type === 'power') colorClass = 'bg-emerald-950/20 border-emerald-900/40 text-[#08D9D6]';
-                  if (cell.type === 'destination') colorClass = 'bg-yellow-500/10 border-yellow-500 text-yellow-100';
-
-                  return (
-                    <div
-                      key={cell.num}
-                      className={`relative min-h-[75px] border-2 rounded-xl p-2 flex flex-col justify-between transition-all group ${colorClass} ${
-                        isOccupied ? 'ring-2 ring-white scale-105 border-white shadow-[0_0_15px_rgba(255,255,255,0.4)] z-10' : ''
-                      }`}
-                    >
-                      <div className="flex justify-between text-[10px] font-mono font-bold tracking-tight">
-                        <span>#{cell.num}</span>
-                        {cell.type === 'trap' ? (
-                          <span className="text-[8px] bg-red-950 border border-red-900 px-1 rounded">TRAP</span>
-                        ) : cell.type === 'power' ? (
-                          <span className="text-[8px] bg-emerald-950 border border-emerald-900 px-1 rounded">UP</span>
-                        ) : null}
-                      </div>
-
-                      <p className="text-[10px] mt-1 uppercase font-bold leading-tight line-clamp-2">
-                        {cell.label}
-                      </p>
-
-                      {/* Animated Pawn overlay */}
-                      {isOccupied && (
-                        <div className="absolute inset-x-0 bottom-1 flex justify-center animate-pulse">
-                          <span className="bg-white text-gray-950 font-mono font-black text-[9px] px-2 py-0.5 rounded-full shadow-lg border border-black uppercase tracking-widest leading-none">
-                            TÚ AQUÍ 🕹️
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
           {/* STEP 8: REFLEXIÓN DE SÍNTESIS */}
           {activeStep === 8 && (
             <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
@@ -1506,28 +1339,13 @@ const FlowMalandro: React.FC = () => {
               </div>
             )}
 
-            {false && activeStep === 7 && (
-              <div className="space-y-3">
-                <blockquote className="border-l-2 border-emerald-500 pl-3 italic text-gray-300 text-xs leading-relaxed bg-[#252A34]/50 p-2 rounded">
-                  "El Mapa de la Trampa"
-                </blockquote>
-                <p className="text-gray-300 text-xs leading-relaxed">
-                  Sentía que cada decisión que tomaba en el negocio me llevaba directo a una trampa: clientes que no pagaban, colaboradores que saboteaban en silencio y ofertas que parecían oro pero eran veneno. Jorge me hizo sentarme y dibujar un tablero de serpientes y escaleras sobre una tabla de triplay. "Toda calle tiene sus trampas invisibles, mija," explicó mientras tiraba dos dados de madera. "Las trampas no están ahí para destruirte; están ahí para probar si aprendiste a leer los patrones. Si caes en la trampa, pagas la multa, te sacudes el polvo y vuelves a tirar los dados. Reconocer la trampa desde antes es lo que te permite desbloquear el siguiente nivel."
-                </p>
-                <div className="bg-gray-900/60 p-3 rounded-lg border border-gray-800 text-[10px] space-y-1 font-mono text-emerald-400">
-                  <p className="font-bold">METODOLOGÍA:</p>
-                  <p className="text-gray-300">Diseño de juegos cognitivos y street adventure.</p>
-                </div>
-              </div>
-            )}
-
             {activeStep === 8 && (
               <div className="space-y-3">
                 <blockquote className="border-l-2 border-red-500 pl-3 italic text-gray-300 text-xs leading-relaxed bg-[#252A34]/50 p-2 rounded">
                   "Síntesis e Integración"
                 </blockquote>
                 <p className="text-gray-400 text-xs leading-normal">
-                  No hackeamos las reglas, hackeamos los incentivos. Tu bitácora final unifica las 7 piezas analizadas en un reporte robusto y claro para el plan de acción inmediato.
+                  No hackeamos las reglas, hackeamos los incentivos. Tu bitácora final unifica las 6 piezas analizadas en un reporte robusto y claro para el plan de acción inmediato.
                 </p>
                 <div className="bg-gray-900/60 p-3 rounded-lg border border-gray-800 text-[10px] space-y-1 font-mono text-red-400">
                   <p className="font-bold">RESULTADO:</p>
@@ -1562,10 +1380,6 @@ const FlowMalandro: React.FC = () => {
                 <span className="text-orange-400 font-bold">{altarCandles.filter(c => c).length} de 3 lit</span>
               </div>
 
-              <div className="flex justify-between items-center text-[11px] border-b border-gray-850 pb-2">
-                <span>🕹️ Nivel Casillero:</span>
-                <span className="text-[#08D9D6] font-bold">{pawnPosition} / 15</span>
-              </div>
             </div>
           </div>
 
