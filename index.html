@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Chalamandra Magistral Decodificadora™ — Mandala Vivo Studio</title>
+<meta name="description" content="The personal portfolio of Danna Brasdefer, a hybrid decoder and symbolic strategist. Featuring the Mandala Vivo Studio, SRAP methodology, projects, and the interactive 'Flow del Malandro' tactical workbook.">
+<meta property="og:title" content="Chalamandra Magistral Decodificadora™ — Mandala Vivo Studio">
+<meta property="og:description" content="The personal portfolio of Danna Brasdefer, a hybrid decoder and symbolic strategist. Featuring the Mandala Vivo Studio, SRAP methodology, projects, and the interactive 'Flow del Malandro' tactical workbook.">
+<meta property="og:type" content="website">
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: { inter: ['Inter','system-ui','sans-serif'] },
+      colors: {
+        'neon-pink': '#FF2E63',
+        'neon-cyan': '#08D9D6',
+        'dark-base': '#252A34',
+        'amber-deep': '#92400e',
+      }
+    }
+  }
+}
+</script>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+
+<!-- Chart.js for SRAP View -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  body { font-family: 'Inter', sans-serif; margin: 0; transition: background-color 0.5s ease, color 0.5s ease; }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+  /* Neon Text Utility */
+  .neon-text {
+    text-shadow: 0 0 5px #FF2E63, 0 0 10px #FF2E63;
+  }
+  .neon-border {
+    box-shadow: 0 0 8px #FF2E63, inset 0 0 8px #FF2E63;
+  }
+  .neon-border:hover {
+    box-shadow: 0 0 15px #08D9D6, inset 0 0 15px #08D9D6;
+  }
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/client": "https://aistudiocdn.com/react-dom@18.3.1/client",
+    "react-dom": "https://aistudiocdn.com/react-dom@18.3.1",
+    "react": "https://aistudiocdn.com/react@18.3.1",
+    "react/jsx-runtime": "https://aistudiocdn.com/react@18.3.1/jsx-runtime",
+    "react-dom/": "https://aistudiocdn.com/react-dom@18.3.1/",
+    "react/": "https://aistudiocdn.com/react@18.3.1/"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="./index.tsx"></script>
+</body>
+</html>

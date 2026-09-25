@@ -1,0 +1,126 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User account profile and role information",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name",
+          "maxLength": 100
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "User avatar URL",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation ISO timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Update ISO timestamp"
+        }
+      },
+      "required": ["userId", "email", "createdAt", "updatedAt"]
+    },
+    "Reflection": {
+      "title": "Synthesis Reflection",
+      "description": "Reflections saved from the Flow Malandro synthesis module",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Document ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID"
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "Owner user email"
+        },
+        "q1": {
+          "type": "string",
+          "description": "Reflexión Anécdota Favorita",
+          "maxLength": 2000
+        },
+        "q2": {
+          "type": "string",
+          "description": "Reflexión Mapa/Ritual/Kit",
+          "maxLength": 2000
+        },
+        "q3": {
+          "type": "string",
+          "description": "Reflexión Metáfora Propia",
+          "maxLength": 2000
+        },
+        "q4": {
+          "type": "string",
+          "description": "Reflexión Herramienta de Claridad",
+          "maxLength": 2000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp"
+        }
+      },
+      "required": ["userId", "q1", "q2", "q3", "q4", "createdAt", "updatedAt"]
+    },
+    "KitConfig": {
+      "title": "Kit Configuration",
+      "description": "User customized Malandro kit tools and intensity sliders",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID"
+        },
+        "equippedTools": {
+          "type": "array",
+          "description": "List of tool keys equipped in backpack"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp"
+        }
+      },
+      "required": ["userId", "equippedTools", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "User profile collection indexed by Auth UID"
+    },
+    "/reflections/{reflectionId}": {
+      "schema": {
+        "$ref": "#/entities/Reflection"
+      },
+      "description": "Flow Malandro user synthesis reflections"
+    },
+    "/kits/{userId}": {
+      "schema": {
+        "$ref": "#/entities/KitConfig"
+      },
+      "description": "User equipped kit configurations"
+    }
+  }
+}

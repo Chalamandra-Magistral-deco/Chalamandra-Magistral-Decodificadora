@@ -1,0 +1,89 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- HELPER FUNCTIONS ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- SCHEMA VALIDATION HELPERS ---
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['userId', 'email', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['userId', 'email', 'displayName', 'photoURL', 'createdAt', 'updatedAt'])
+        && data.userId is string && data.userId == request.auth.uid
+        && data.email is string && data.email.size() <= 256
+        && (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100))
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500))
+        && data.createdAt is string
+        && data.updatedAt is string;
+    }
+
+    function isValidReflection(data) {
+      return data.keys().hasAll(['userId', 'q1', 'q2', 'q3', 'q4', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'userId', 'userEmail', 'q1', 'q2', 'q3', 'q4', 'createdAt', 'updatedAt'])
+        && data.userId is string && data.userId == request.auth.uid
+        && (!('userEmail' in data) || (data.userEmail is string && data.userEmail.size() <= 256))
+        && data.q1 is string && data.q1.size() <= 2000
+        && data.q2 is string && data.q2.size() <= 2000
+        && data.q3 is string && data.q3.size() <= 2000
+        && data.q4 is string && data.q4.size() <= 2000
+        && data.createdAt is string
+        && data.updatedAt is string;
+    }
+
+    function isValidKit(data) {
+      return data.keys().hasAll(['userId', 'equippedTools', 'updatedAt'])
+        && data.keys().hasOnly(['userId', 'equippedTools', 'updatedAt'])
+        && data.userId is string && data.userId == request.auth.uid
+        && data.equippedTools is list && data.equippedTools.size() <= 20
+        && data.updatedAt is string;
+    }
+
+    // --- DEFAULT DENY ---
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- USERS COLLECTION ---
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming()) && incoming().userId == existing().userId;
+      allow delete: if isOwner(userId) && isValidId(userId);
+    }
+
+    // --- REFLECTIONS COLLECTION ---
+    match /reflections/{reflectionId} {
+      allow get: if isSignedIn() && isValidId(reflectionId) && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(reflectionId) && isValidReflection(incoming());
+      allow update: if isSignedIn() && isValidId(reflectionId) && resource.data.userId == request.auth.uid && isValidReflection(incoming()) && incoming().userId == existing().userId;
+      allow delete: if isSignedIn() && isValidId(reflectionId) && resource.data.userId == request.auth.uid;
+    }
+
+    // --- KITS COLLECTION ---
+    match /kits/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidKit(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidKit(incoming()) && incoming().userId == existing().userId;
+      allow delete: if isOwner(userId) && isValidId(userId);
+    }
+  }
+}
