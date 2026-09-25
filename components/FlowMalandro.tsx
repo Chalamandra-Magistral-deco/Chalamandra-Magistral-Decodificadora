@@ -417,7 +417,7 @@ const FlowMalandro: React.FC = () => {
           </button>
         </div>
 
-        {/* Step Indicator Badges (1 to 6 + reflections) */}
+        {/* Step Indicator Badges (1 to 7) */}
         <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mt-6">
           {[
             { id: 1, em: '⚽', label: 'El Messi' },
@@ -426,7 +426,7 @@ const FlowMalandro: React.FC = () => {
             { id: 4, em: '🗺️', label: 'Caos' },
             { id: 5, em: '🎂', label: 'Pastelote' },
             { id: 6, em: '🕯️', label: 'Ritual' },
-            { id: 8, em: '🧠', label: 'Reflexión' },
+            { id: 7, em: '🧠', label: 'Reflexión' },
           ].map((item) => (
             <button
               key={item.id}
@@ -1159,8 +1159,8 @@ const FlowMalandro: React.FC = () => {
             </div>
           )}
 
-          {/* STEP 8: REFLEXIÓN DE SÍNTESIS */}
-          {activeStep === 8 && (
+          {/* STEP 7: REFLEXIÓN DE SÍNTESIS */}
+          {activeStep === 7 && (
             <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
               <div>
                 <span className="text-xs font-mono font-bold bg-[#FF2E63]/20 text-[#FF2E63] border border-[#FF2E63]/20 px-3 py-1 rounded-full uppercase">
