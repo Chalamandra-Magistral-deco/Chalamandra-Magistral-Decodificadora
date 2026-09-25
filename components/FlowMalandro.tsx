@@ -434,9 +434,6 @@ const FlowMalandro: React.FC = () => {
     md += `- ¿Ritual Completado?: ${ritualCompleted ? 'SÍ, CON HONOR' : 'AÚN EN PROCESO'}\n`;
     md += `- Lección del Fracaso: ${brokenTribute || 'Sin registrar'}\n\n`;
 
-    md += `## 7. Camino de la Trampa\n`;
-    md += `- Posición actual en el laberinto: Casilla ${pawnPosition} de 15\n\n`;
-
     md += `## PREGUNTAS DE REFLEXIÓN FINAL\n\n`;
     md += `### 1. ¿Qué anécdota te pega más y por qué?\n`;
     md += `> ${reflections.q1 || 'Sin respuesta'}\n\n`;
@@ -490,7 +487,7 @@ const FlowMalandro: React.FC = () => {
           </button>
         </div>
 
-        {/* Step Indicator Badges (1 to 7 + reflections) */}
+        {/* Step Indicator Badges (1 to 6 + reflections) */}
         <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mt-6">
           {[
             { id: 1, em: '⚽', label: 'El Messi' },
@@ -499,7 +496,6 @@ const FlowMalandro: React.FC = () => {
             { id: 4, em: '🗺️', label: 'Caos' },
             { id: 5, em: '🎂', label: 'Pastelote' },
             { id: 6, em: '🕯️', label: 'Ritual' },
-            { id: 7, em: '🎲', label: 'La Trampa' },
             { id: 8, em: '🧠', label: 'Reflexión' },
           ].map((item) => (
             <button
@@ -1234,7 +1230,7 @@ const FlowMalandro: React.FC = () => {
           )}
 
           {/* STEP 7: EL MAPA DE LA TRAMPA (Snakes & Ladders style) */}
-          {activeStep === 7 && (
+          {false && activeStep === 7 && (
             <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
               <div>
                 <span className="text-xs font-mono font-bold bg-[#08D9D6]/20 text-[#08D9D6] border border-[#08D9D6]/20 px-3 py-1 rounded-full uppercase">
@@ -1510,7 +1506,7 @@ const FlowMalandro: React.FC = () => {
               </div>
             )}
 
-            {activeStep === 7 && (
+            {false && activeStep === 7 && (
               <div className="space-y-3">
                 <blockquote className="border-l-2 border-emerald-500 pl-3 italic text-gray-300 text-xs leading-relaxed bg-[#252A34]/50 p-2 rounded">
                   "El Mapa de la Trampa"
