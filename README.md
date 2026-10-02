@@ -1,4 +1,4 @@
-# Chalamandra QuantumMind™ — Mandala Vivo
+# Chalamandra Magistral Decodificadora — Mandala Vivo Studio
 
 > **Engineering Level:** Senior Master Artifact  
 > **Architecture:** React 18 (Hybrid Module) + TailwindCSS + Chart.js  
@@ -131,4 +131,4 @@ npm run preview
 ```
 
 ---
-*Engineered by Chalamandra QuantumMind XYZ*
+*Engineered by Chalamandra Magistral Decodificadora*

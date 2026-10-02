@@ -31,3 +31,13 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Firebase config local (usa .env.example)
+firebase-applet-config.json
+
+# Firebase config local (migrando a .env)
+firebase-applet-config.json
+
+# Lockfiles alternos (el proyecto usa bun.lock)
+package-lock.json
+yarn.lock
